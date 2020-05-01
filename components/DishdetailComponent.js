@@ -45,7 +45,6 @@ class Dishdetail extends Component {
             <RenderDish dish={this.state.dishes[+dishId]} />
         );
     }
-    
 }
 
 export default Dishdetail;
