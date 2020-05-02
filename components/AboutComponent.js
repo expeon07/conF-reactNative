@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
 import { ScrollView, Text } from 'react-native';
 import { Card, ListItem } from 'react-native-elements';
-import { LEADERS } from '../shared/leaders';
 import { FlatList } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
+import { baseUrl } from '../shared/baseUrl';
 
+
+const mapStateToProps = state => {
+    return {
+        leaders: state.leaders
+    }
+}
 
 function History() {
     return(
@@ -22,8 +29,9 @@ function RenderLeaders(props) {
             <ListItem key={index}
                 title={item.name}
                 subtitle={item.description}
+                subtitleNumberOfLines={15}
                 hideChevron={true}
-                leftAvatar={{ source: require('./images/alberto.png')}} />
+                leftAvatar={{ source:  { uri: baseUrl + item.image }}} />
         );
     }
 
@@ -37,12 +45,6 @@ function RenderLeaders(props) {
 }
 
 class About extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            leaders: LEADERS
-        };
-    }
 
     static navigationOptions = {
         title: 'About Us'
@@ -52,10 +54,10 @@ class About extends Component {
         return(
             <ScrollView> 
                 <History />
-                <RenderLeaders leaders={this.state.leaders} />
+                <RenderLeaders leaders={this.props.leaders.leaders} />
             </ScrollView>    
         );
     }
 }
 
-export default About;
+export default connect(mapStateToProps)(About);

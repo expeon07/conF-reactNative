@@ -127,6 +127,7 @@ export const fetchLeaders = () => (dispatch) => {
                 throw error;
             }
         },
+        // if there is error, throw message
         error => {
             var errMess = new Error(error.message)
             throw errMess;
