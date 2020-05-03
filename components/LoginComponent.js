@@ -126,7 +126,7 @@ class RegisterTab extends Component {
     };
 
     processImage = async (imageUri) => {
-        let processedImage = await ImageManipulator.manipulate(
+        let processedImage = await ImageManipulator.manipulateAsync(
             imageUri,
             [
                 { resize: { width: 400 }}
@@ -147,7 +147,22 @@ class RegisterTab extends Component {
             });
 
             if (!capturedImage.cancelled) {
-                this.processedImage(capturedImage.uri);
+                this.processImage(capturedImage.uri);
+            }
+        }
+    }
+
+    getImageFromGallery = async () => {
+        const galleryPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL)
+
+        if (galleryPermission.status === 'granted') {
+            let capturedImage = await ImagePicker.launchImageLibraryAsync({
+                allowsEditing: true,
+                aspect: [4, 3]
+            });
+
+            if (!capturedImage.cancelled) {
+                this.processImage(capturedImage.uri);
             }
         }
     }
@@ -170,8 +185,12 @@ class RegisterTab extends Component {
                     <Image source={{ uri: this.state.imageUrl }}
                         loadingIndicatorSource={require('./images/logo.png')}
                         style={styles.image} />
-                    <Button title='Camera'
+                    <Button 
+                        title='Camera'
                         onPress={this.getImageFromCamera} />
+                    <Button 
+                        title='Gallery'
+                        onPress={this.getImageFromGallery} />
                 </View>
                 <Input placeholder="Username"
                     leftIcon={{ type: 'font-awesome', name: 'user-o'}}
@@ -247,14 +266,14 @@ const styles = StyleSheet.create({
         height: 60
     },
     formInput: {
-        margin: 20
+        margin: 10
     },
     formCheckbox: {
         margin: 20,
         backgroundColor: null
     },
     formButton: {
-        margin: 60
+        margin: 20
     }
 });
 
